@@ -27,16 +27,14 @@ function saveUsers(users: User[]) {
 
 export async function ensureAdminUser() {
   const users = loadUsers();
-
   if (users.length === 0) {
     const admin: User = {
       id: generateId(),
       nome: "Administrador",
-      email: "admin@bioacess.local",
+      email: "admin@bioaccess.local", 
       role: "admin",
       passwordHash: await hashPassword("admin123"),
     };
-
     saveUsers([admin]);
   }
 }
