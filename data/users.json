@@ -1,0 +1,16 @@
+[
+  {
+    "id": "mimjm04ro6u5bmkjqsa",
+    "nome": "Administrador",
+    "email": "admin@bioacess.local",
+    "role": "admin",
+    "passwordHash": "$2b$10$f8XuZTpPeVCgvNsCfB6O3O2gfcof.v/dFEaacUfZJ9EdUL0YxLT5q"
+  },
+  {
+    "id": "mimnn36c2cqzmvhfah8",
+    "nome": "pedro",
+    "email": "decolpedro@gmail.com",
+    "role": "motorista",
+    "passwordHash": "$2b$10$MPCOccKJdegpU.mbf15Wy.doAbE5HMlXT5FArzzr1WYcuCA9EsGKu"
+  }
+]
