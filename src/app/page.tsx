@@ -7,7 +7,7 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-slate-100 text-slate-800">
-      <h1 className="text-3xl font-bold mb-6">Sistema Bio Acess</h1>
+      <h1 className="text-3xl font-bold mb-6">Sistema Bio Access</h1>
 
       <p className="text-slate-600 mb-4">
         Sistema de monitoramento e rastreamento de bombonas.

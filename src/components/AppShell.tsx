@@ -34,7 +34,7 @@ export function AppShell({ title, children }: AppShellProps) {
             BA
           </div>
           <div className="leading-tight text-left">
-            <p className="text-sm font-semibold">Bio Acess</p>
+            <p className="text-sm font-semibold">Bio Access</p>
             <p className="text-[11px] text-slate-300">
               Monitoramento de bombonas
             </p>
