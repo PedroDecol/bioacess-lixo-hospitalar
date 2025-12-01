@@ -17,8 +17,10 @@ export default function AssinaturaPage() {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    canvas.width = 500;
-    canvas.height = 250;
+    // deixa responsivo: usa o tamanho visual do elemento
+    const rect = canvas.getBoundingClientRect();
+    canvas.width = rect.width;
+    canvas.height = rect.height;
 
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
@@ -30,17 +32,57 @@ export default function AssinaturaPage() {
     ctxRef.current = ctx;
   }, []);
 
-  function startDrawing(e: React.MouseEvent) {
-    const { offsetX, offsetY } = e.nativeEvent;
+  // pega posição do mouse/touch relativa ao canvas
+  function getPos(
+    e:
+      | React.MouseEvent<HTMLCanvasElement>
+      | React.TouchEvent<HTMLCanvasElement>
+  ) {
+    const canvas = canvasRef.current;
+    if (!canvas) return { x: 0, y: 0 };
+
+    const rect = canvas.getBoundingClientRect();
+
+    // touch
+    if ("touches" in e && e.touches.length > 0) {
+      const touch = e.touches[0];
+      return {
+        x: touch.clientX - rect.left,
+        y: touch.clientY - rect.top,
+      };
+    }
+
+    // mouse
+    const mouseEvent = e as React.MouseEvent<HTMLCanvasElement>;
+    return {
+      x: mouseEvent.clientX - rect.left,
+      y: mouseEvent.clientY - rect.top,
+    };
+  }
+
+  function startDrawing(
+    e:
+      | React.MouseEvent<HTMLCanvasElement>
+      | React.TouchEvent<HTMLCanvasElement>
+  ) {
+    e.preventDefault(); // impede scroll em touch
+
+    const { x, y } = getPos(e);
     ctxRef.current?.beginPath();
-    ctxRef.current?.moveTo(offsetX, offsetY);
+    ctxRef.current?.moveTo(x, y);
     setIsDrawing(true);
   }
 
-  function draw(e: React.MouseEvent) {
+  function draw(
+    e:
+      | React.MouseEvent<HTMLCanvasElement>
+      | React.TouchEvent<HTMLCanvasElement>
+  ) {
     if (!isDrawing) return;
-    const { offsetX, offsetY } = e.nativeEvent;
-    ctxRef.current?.lineTo(offsetX, offsetY);
+    e.preventDefault();
+
+    const { x, y } = getPos(e);
+    ctxRef.current?.lineTo(x, y);
     ctxRef.current?.stroke();
   }
 
@@ -88,11 +130,18 @@ export default function AssinaturaPage() {
 
       <canvas
         ref={canvasRef}
-        className="bg-white border rounded shadow"
+        className="bg-white border rounded shadow w-full max-w-lg h-64 touch-none"
+
+        // mouse
         onMouseDown={startDrawing}
         onMouseMove={draw}
         onMouseUp={stopDrawing}
         onMouseLeave={stopDrawing}
+
+        // touch (mobile)
+        onTouchStart={startDrawing}
+        onTouchMove={draw}
+        onTouchEnd={stopDrawing}
       />
 
       <div className="flex gap-3 mt-4">
