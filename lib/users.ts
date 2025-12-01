@@ -25,19 +25,19 @@ function saveUsers(users: User[]) {
   writeJson<User[]>(USERS_FILE, users);
 }
 
-export function ensureAdminUser() {
+export async function ensureAdminUser() {
   const users = loadUsers();
+
   if (users.length === 0) {
-    (async () => {
-      const admin: User = {
-        id: generateId(),
-        nome: "Administrador",
-        email: "admin@bioaccess.local",
-        role: "admin",
-        passwordHash: await hashPassword("admin123"),
-      };
-      saveUsers([admin]);
-    })();
+    const admin: User = {
+      id: generateId(),
+      nome: "Administrador",
+      email: "admin@bioacess.local",
+      role: "admin",
+      passwordHash: await hashPassword("admin123"),
+    };
+
+    saveUsers([admin]);
   }
 }
 
