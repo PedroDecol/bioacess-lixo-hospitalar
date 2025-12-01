@@ -5,7 +5,7 @@ import { useState } from "react";
 
 export default function LoginPage() {
   const router = useRouter();
-  const [email, setEmail] = useState("admin@bioacess.local");
+  const [email, setEmail] = useState("admin@bioaccess.local");
   const [password, setPassword] = useState("admin123");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -46,7 +46,7 @@ export default function LoginPage() {
               BA
             </div>
             <div>
-              <h1 className="text-xl font-semibold">Bio Acess</h1>
+              <h1 className="text-xl font-semibold">Bio Access</h1>
               <p className="text-xs text-slate-300">
                 Monitoramento e rastreamento de bombonas hospitalares.
               </p>
@@ -103,7 +103,7 @@ export default function LoginPage() {
           </button>
 
           <p className="text-[11px] text-slate-500">
-            Usuário demo: admin@bioacess.local / admin123
+            Usuário demo: admin@bioaccess.local / admin123
           </p>
         </form>
       </div>
