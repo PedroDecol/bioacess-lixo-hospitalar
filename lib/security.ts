@@ -1,9 +1,13 @@
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
 
-const JWT_SECRET = process.env.JWT_SECRET || "dev-secret";
-const ENC_KEY = process.env.ENCRYPTION_KEY || "32_chars_abcdefghijklmnopqrstuvwxyz12";
-const ENC_IV = process.env.ENCRYPTION_IV || "16_chars_de_iv_123";
+const SECRET = process.env.CRYPTO_SECRET || "bioacess-demo-secret";
+
+const ALGORITHM = "aes-256-ctr";
+
+const KEY = crypto.createHash("sha256").update(String(SECRET)).digest();
+
+const IV = KEY.subarray(0, 16);
 
 export async function hashPassword(password: string): Promise<string> {
   const salt = await bcrypt.genSalt(10);
@@ -15,15 +19,23 @@ export async function comparePassword(password: string, hash: string): Promise<b
 }
 
 export function encrypt(text: string): string {
-  const cipher = crypto.createCipheriv("aes-256-cbc", Buffer.from(ENC_KEY), Buffer.from(ENC_IV));
-  let encrypted = cipher.update(text, "utf8", "hex");
-  encrypted += cipher.final("hex");
-  return encrypted;
+  if (!text) return "";
+
+  const cipher = crypto.createCipheriv(ALGORITHM, KEY, IV);
+  const encrypted = Buffer.concat([cipher.update(text, "utf8"), cipher.final()]);
+  return encrypted.toString("base64"); // mais seguro para JSON
 }
 
 export function decrypt(encryptedText: string): string {
-  const decipher = crypto.createDecipheriv("aes-256-cbc", Buffer.from(ENC_KEY), Buffer.from(ENC_IV));
-  let decrypted = decipher.update(encryptedText, "hex", "utf8");
-  decrypted += decipher.final("utf8");
-  return decrypted;
+  if (!encryptedText) return "";
+
+  try {
+    const buffer = Buffer.from(encryptedText, "base64");
+    const decipher = crypto.createDecipheriv(ALGORITHM, KEY, IV);
+    const decrypted = Buffer.concat([decipher.update(buffer), decipher.final()]);
+    return decrypted.toString("utf8");
+  } catch {
+    // se der erro, retorna vazio (evita crash na Vercel)
+    return "";
+  }
 }
